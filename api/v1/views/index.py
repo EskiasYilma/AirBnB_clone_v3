@@ -24,9 +24,11 @@ def status():
 @app_views.route('/stats', strict_slashes=False)
 def stats():
     """
-    get stats from models
+    get stats from all models
     """
-    model_dict = {"Amenity": Amenity, "City": City,
-                  "Place": Place, "Review": Review,
-                  "State": State, "User": User}
-    return jsonify({"status": "sss"})
+    models_dict = {"Amenity": Amenity, "City": City,
+                   "Place": Place, "Review": Review,
+                   "State": State, "User": User}
+    for i, j in models_dict.items():
+        models_dict[i] = storage.count(j)
+    return jsonify(models_dict)
