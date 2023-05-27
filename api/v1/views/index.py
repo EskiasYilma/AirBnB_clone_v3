@@ -12,6 +12,7 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
+
 @app_views.route('/status', strict_slashes=False)
 def status():
     """
@@ -26,5 +27,6 @@ def stats():
     get stats from models
     """
     model_dict = {"Amenity": Amenity, "City": City,
-           "Place": Place, "Review": Review, "State": State, "User": User}
+                  "Place": Place, "Review": Review,
+                  "State": State, "User": User}
     return jsonify({"status": "sss"})
