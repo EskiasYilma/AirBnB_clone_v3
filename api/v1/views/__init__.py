@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """
-Init Directory with Flask modules
+Creates Blueprints for a flask app
 """
+from api.v1.views.index import *
 from flask import Blueprint
 
 
