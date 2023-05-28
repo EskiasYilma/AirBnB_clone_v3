@@ -12,7 +12,7 @@ from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotFound
 methods = ["GET", "POST", "DELETE", "PUT"]
 
 
-@app_views.route("/states", methods=[methods[0]])
+@app_views.route("/states/", methods=[methods[0]])
 @app_views.route("/states/<state_id>", methods=[methods[0]])
 def all_states(state_id=None):
     """
