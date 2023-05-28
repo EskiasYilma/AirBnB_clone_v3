@@ -13,7 +13,6 @@ methods = ["GET", "POST", "DELETE", "PUT"]
 
 
 @app_views.route("/states", methods=[methods[0]])
-@app_views.route("/states/", methods=[methods[0]])
 @app_views.route("/states/<state_id>", methods=[methods[0]])
 def all_states(state_id=None):
     """
@@ -35,7 +34,6 @@ def all_states(state_id=None):
 
 
 @app_views.route("/states", methods=[methods[1]])
-@app_views.route("/states/", methods=[methods[1]])
 def new_state():
     """
     Adds new State to storage
