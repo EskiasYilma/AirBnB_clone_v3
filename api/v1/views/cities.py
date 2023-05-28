@@ -29,10 +29,12 @@ def all_cities(city_id=None, state_id=None):
                 temp.append(i.to_dict())
             if len(temp) != 0:
                 return jsonify(temp)
+        raise NotFound()
     elif city_id is not None:
         city = storage.get(City, city_id)
         if city:
             return jsonify(city.to_dict())
+        raise NotFound()
     raise NotFound()
 
 
@@ -86,7 +88,6 @@ def update_city(city_id=None):
     """
     ignore_keys = ["id", "state_id", "created_at", "updated_at"]
     upd_ct = None
-    temp = []
     city = storage.get(City, city_id)
     if city:
         try:
