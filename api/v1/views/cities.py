@@ -15,8 +15,8 @@ import os
 methods = ["GET", "POST", "DELETE", "PUT"]
 
 
-@app_views.route("/states/<state_id>/cities/", methods=[methods[0]])
 @app_views.route("/states/<state_id>/cities", methods=[methods[0]])
+@app_views.route("/states/<state_id>/cities/", methods=[methods[0]])
 def all_cities(state_id=None):
     """
     Get all Cities with state_id
