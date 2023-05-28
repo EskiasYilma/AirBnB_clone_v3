@@ -16,9 +16,9 @@ methods = ["GET", "POST", "DELETE", "PUT"]
 
 
 @app_views.route("/states/<state_id>/cities", methods=[methods[0]])
-def all_cities(city_id=None, state_id=None):
+def all_cities(state_id=None):
     """
-    Get all Cities or a single City with state_id or city_id
+    Get all Cities with state_id
     """
     states = storage.get(State, state_id)
     if states:
@@ -31,9 +31,9 @@ def all_cities(city_id=None, state_id=None):
 
 
 @app_views.route("/cities/<city_id>", methods=[methods[0]])
-def one_city(city_id=None, state_id=None):
+def one_city(city_id=None):
     """
-    Get all Cities or a single City with state_id or city_id
+    Get a single City with city_id
     """
     city = storage.get(City, city_id)
     if city:
