@@ -87,15 +87,14 @@ def update_city(city_id=None):
     ignore_keys = ["id", "state_id", "created_at", "updated_at"]
     upd_ct = None
     temp = []
-    if city_id:
-        city = storage.get(City, city_id)
-        if city:
-            try:
-                upd_ct = request.get_json()
-            except Exception:
-                pass
-            if upd_ct is None or type(upd_ct) is not dict:
-                raise BadRequest(description="Not a JSON")
+    city = storage.get(City, city_id)
+    if city:
+        try:
+            upd_ct = request.get_json()
+        except Exception:
+            pass
+        if upd_ct is None or type(upd_ct) is not dict:
+            raise BadRequest(description="Not a JSON")
         for i, j in upd_ct.items():
             if i not in ignore_keys:
                 setattr(city, i, j)
