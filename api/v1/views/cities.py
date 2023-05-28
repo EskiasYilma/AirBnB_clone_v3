@@ -1,0 +1,97 @@
+#!/usr/bin/python3
+"""
+Handles all default RESTFul API actions for State objects
+"""
+from api.v1.views import app_views
+from models import storage
+from models.state import State
+from models.city import City
+from flask import request, jsonify
+from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotFound
+
+
+methods = ["GET", "POST", "DELETE", "PUT"]
+
+
+@app_views.route("/cities/", methods=[methods[0]])
+@app_views.route("/cities", methods=[methods[0]])
+@app_views.route("/cities/<city_id>", methods=[methods[0]])
+@app_views.route("/states/<state_id>/cities", methods=[methods[0]])
+def all_cities(city_id=None, state_id=None):
+    """
+    Get all Cities or a single City with state_id or city_id
+    """
+    if state_id is not None:
+        states = storage.get(State, state_id)
+        if states:
+            temp = []
+            for i in states.cities:
+                temp.append(i.to_dict())
+            if len(temp) != 0:
+                return jsonify(temp)
+    elif city_id is not None:
+        city = storage.get(City, city_id)
+        if city:
+            return jsonify(city.to_dict())
+    raise NotFound()
+
+
+@app_views.route("/states/<state_id>/cities", methods=[methods[1]])
+def new_city(state_id=None):
+    """
+    Adds new City to storage
+    """
+    states = storage.get(State, state_id)
+    if not states:
+        raise NotFound()
+    new_ct = None
+    try:
+        new_ct = request.get_json()
+    except Exception:
+        pass
+    if new_ct is None or type(new_ct) is not dict:
+        raise BadRequest(description="Not a JSON")
+    if 'name' not in new_ct:
+        raise BadRequest(description="Missing name")
+    new_ct['state_id'] = state_id
+    city = City(**new_ct)
+    city.save()
+    return jsonify(city.to_dict()), 201
+
+
+@app_views.route("/cities/<city_id>", methods=[methods[2]])
+def delete_city(city_id=None):
+    """
+    Removes City from storage by city_id
+    """
+    city = storage.get(City, city_id)
+    if city:
+        storage.delete(city)
+        storage.save()
+        return jsonify({}), 200
+    raise NotFound()
+
+
+@app_views.route("/cities/<city_id>", methods=[methods[3]])
+def update_city(city_id=None):
+    """
+    Updates City in storage by city_id
+    """
+    ignore_keys = ["id", "state_id", "created_at", "updated_at"]
+    upd_ct = None
+    temp = []
+    if city_id:
+        city = storage.get(City, city_id)
+        if city:
+            try:
+                upd_ct = request.get_json()
+            except Exception:
+                pass
+            if upd_ct is None or type(upd_ct) is not dict:
+                raise BadRequest(description="Not a JSON")
+        for i, j in upd_ct.items():
+            if i not in ignore_keys:
+                setattr(city, i, j)
+        city.save()
+        return jsonify(city.to_dict()), 200
+    raise NotFound()
