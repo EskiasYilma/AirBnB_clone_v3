@@ -75,20 +75,20 @@ def update_state(state_id=None):
     states = storage.all(State).values()
     ignore_keys = ["id", "created_at", "updated_at"]
     upd_st = {}
-    if state_id is not None:
-        temp = []
-        for i in states:
-            if i.id == state_id:
-                upd_st = request.get_json()
-                if type(upd_st) is not dict:
-                    raise BadRequest(description="Not a JSON")
-                temp.append(i)
-        if len(temp) != 0:
-            existing_st = temp[0]
-            for i, j in upd_st.items():
-                if i not in ignore_keys:
-                    setattr(existing_st, i, j)
-            existing_st.save()
-            return jsonify(existing_st.to_dict()), 200
-        raise NotFound()
+    # if state_id is not None:
+    temp = []
+    for i in states:
+        if i.id == state_id:
+            upd_st = request.get_json()
+            if type(upd_st) is not dict:
+                raise BadRequest(description="Not a JSON")
+            temp.append(i)
+    if len(temp) != 0:
+        existing_st = temp[0]
+        for i, j in upd_st.items():
+            if i not in ignore_keys:
+                setattr(existing_st, i, j)
+        existing_st.save()
+        return jsonify(existing_st.to_dict()), 200
     raise NotFound()
+    # raise NotFound()
