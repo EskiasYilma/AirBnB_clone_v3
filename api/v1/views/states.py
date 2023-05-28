@@ -54,17 +54,17 @@ def delete_state(state_id=None):
     Removes State from storage by state_id
     """
     states = storage.all(State).values()
-    if state_id is not None:
-        temp = []
-        for i in states:
-            if i.id == state_id:
-                temp.append(i)
-        if len(temp) != 0:
-            storage.delete(temp[0])
-            storage.save()
-            return jsonify({}), 200
-        raise NotFound()
+    # if state_id is not None:
+    temp = []
+    for i in states:
+        if i.id == state_id:
+            temp.append(i)
+    if len(temp) != 0:
+        storage.delete(temp[0])
+        storage.save()
+        return jsonify({}), 200
     raise NotFound()
+    # raise NotFound()
 
 
 @app_views.route("/states/<state_id>", methods=[methods[3]])
