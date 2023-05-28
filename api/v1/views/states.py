@@ -12,7 +12,6 @@ from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotFound
 methods = ["GET", "POST", "DELETE", "PUT"]
 
 
-@app_views.route("/states", methods=[methods[0]])
 @app_views.route("/states/", methods=[methods[0]])
 @app_views.route("/states/<state_id>", methods=[methods[0]])
 def all_states(state_id=None):
@@ -34,17 +33,20 @@ def all_states(state_id=None):
     return jsonify(all_states_dict)
 
 
-@app_views.route("/states", methods=[methods[1]])
 @app_views.route("/states/", methods=[methods[1]])
 def new_state():
     """
     Adds new State to storage
     """
-    new_st = request.get_json()
-    if type(new_st) is not dict:
+    new_st = None
+    try:
+        new_st = request.get_json()
+    except Exception:
+        pass
+    if new_st is None or type(new_st) is not dict:
         raise BadRequest(description="Not a JSON")
     if 'name' not in new_st:
-        raise BadRequest(description="Name Required")
+        raise BadRequest(description="Missing name")
     state = State(**new_st)
     state.save()
     return jsonify(state.to_dict()), 201
@@ -76,13 +78,16 @@ def update_state(state_id=None):
     """
     states = storage.all(State).values()
     ignore_keys = ["id", "created_at", "updated_at"]
-    upd_st = {}
+    upd_st = None
     # if state_id is not None:
     temp = []
     for i in states:
         if i.id == state_id:
-            upd_st = request.get_json()
-            if type(upd_st) is not dict:
+            try:
+                upd_st = request.get_json()
+            except Exception:
+                pass
+            if upd_st is None or type(upd_st) is not dict:
                 raise BadRequest(description="Not a JSON")
             temp.append(i)
     if len(temp) != 0:
