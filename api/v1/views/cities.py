@@ -53,8 +53,8 @@ def new_city(state_id=None):
     states = storage.get(State, state_id)
     if not states:
         raise NotFound()
+    new_ct['state_id'] = state_id
     city = City(**new_ct)
-    city.state_id = state_id
     city.save()
     return jsonify(city.to_dict()), 201
 
