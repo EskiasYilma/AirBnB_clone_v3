@@ -6,16 +6,17 @@ from api.v1.views import app_views
 from models import storage
 from models.state import State
 from models.city import City
+from models.place import Place
+from models.review import Review
 from flask import request, jsonify
 from werkzeug.exceptions import MethodNotAllowed, BadRequest, NotFound
-
+import os
 
 methods = ["GET", "POST", "DELETE", "PUT"]
 
 
 @app_views.route("/cities/<city_id>", methods=[methods[0]])
 @app_views.route("/states/<state_id>/cities", methods=[methods[0]])
-@app_views.route("/states/<state_id>/cities/", methods=[methods[0]])
 def all_cities(city_id=None, state_id=None):
     """
     Get all Cities or a single City with state_id or city_id
@@ -65,6 +66,13 @@ def delete_city(city_id=None):
     """
     city = storage.get(City, city_id)
     if city:
+        # if os.getenv('HBNB_TYPE_STORAGE') != "db":
+        for i in storage.all(Place).values():
+            if i.city_id == city_id:
+                for j in storage.all(Review).values():
+                    if j.place_id == i.id:
+                        storage.delete(j)
+                storage.delete(i)
         storage.delete(city)
         storage.save()
         return jsonify({}), 200
