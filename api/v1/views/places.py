@@ -27,13 +27,8 @@ def all_places(city_id=None, place_id=None):
         city = storage.get(City, city_id)
         if city:
             temp = []
-            if os.getenv('HBNB_TYPE_STORAGE') == "db":
-                for i in city.places:
-                    temp.append(i.to_dict())
-            else:
-                for i in storage.all(Place).values():
-                    if i.city_id == city_id:
-                        temp.append(i.to_dict())
+            for i in city.places:
+                temp.append(i.to_dict())
             if len(temp) != 0:
                 return jsonify(temp)
     elif place_id is not None:
