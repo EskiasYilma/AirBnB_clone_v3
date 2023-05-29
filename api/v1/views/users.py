@@ -75,7 +75,7 @@ def update_user(user_id=None):
     """
     Updates User in storage by user_id
     """
-    ignore_keys = ["id", "state_id", "created_at", "updated_at"]
+    ignore_keys = ["id", "email", "created_at", "updated_at"]
     upd_usr = None
     user = storage.get(User, user_id)
     if user:
