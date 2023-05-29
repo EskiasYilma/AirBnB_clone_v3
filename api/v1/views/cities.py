@@ -18,7 +18,7 @@ methods = ["GET", "POST", "DELETE", "PUT"]
 @app_views.route("/states/<state_id>/cities", methods=[methods[0]])
 @app_views.route("/cities/<city_id>", methods=[methods[0]],
                  strict_slashes=False)
-def all_cities(city_id=None, state_id=None):
+def all_cities(state_id=None, city_id=None):
     """
     Get all Cities or a single City with state_id or city_id
     """
