@@ -16,7 +16,8 @@ methods = ["GET", "POST", "DELETE", "PUT"]
 
 
 @app_views.route("/states/<state_id>/cities", methods=[methods[0]])
-@app_views.route("/cities/<city_id>", methods=[methods[0]])
+@app_views.route("/cities/<city_id>", methods=[methods[0]],
+                 strict_slashes=False)
 def all_cities(city_id=None, state_id=None):
     """
     Get all Cities or a single City with state_id or city_id
@@ -36,7 +37,8 @@ def all_cities(city_id=None, state_id=None):
     raise NotFound()
 
 
-@app_views.route("/states/<state_id>/cities", methods=[methods[1]])
+@app_views.route("/states/<state_id>/cities", methods=[methods[1]],
+                 strict_slashes=False)
 def new_city(state_id=None):
     """
     Adds new City to storage
@@ -59,7 +61,8 @@ def new_city(state_id=None):
     return jsonify(city.to_dict()), 201
 
 
-@app_views.route("/cities/<city_id>", methods=[methods[2]])
+@app_views.route("/cities/<city_id>", methods=[methods[2]],
+                 strict_slashes=False)
 def delete_city(city_id=None):
     """
     Removes City from storage by city_id
@@ -79,7 +82,8 @@ def delete_city(city_id=None):
     raise NotFound()
 
 
-@app_views.route("/cities/<city_id>", methods=[methods[3]])
+@app_views.route("/cities/<city_id>", methods=[methods[3]],
+                 strict_slashes=False)
 def update_city(city_id=None):
     """
     Updates City in storage by city_id
